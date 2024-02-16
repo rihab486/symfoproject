@@ -25,8 +25,8 @@ class Category
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::ARRAY, nullable: true)]
-    private ?array $imageUrls = null;
+    #[ORM\Column(length: 255)]
+    private ?string $imageUrl =null;
 
     #[ORM\Column(nullable: true)]
     private ?bool $isMega = null;
@@ -34,11 +34,14 @@ class Category
     #[ORM\Column(nullable: true)]
     private ?\DateTimeImmutable $updated_at = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $created_at = null;
+    
+    
 
     #[ORM\ManyToMany(targetEntity: Product::class, mappedBy: 'categories')]
     private Collection $products;
+
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
 
     public function __construct()
     {
@@ -86,14 +89,14 @@ class Category
         return $this;
     }
 
-    public function getImageUrls(): ?array
+    public function getImageUrl(): ?string
     {
-        return $this->imageUrls;
+        return $this->imageUrl;
     }
 
-    public function setImageUrls(?array $imageUrls): static
+    public function setImageUrl(?string $imageUrl): static
     {
-        $this->imageUrls = $imageUrls;
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
@@ -122,17 +125,11 @@ class Category
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
+   
+    
 
-    public function setCreatedAt(\DateTimeImmutable $created_at): static
-    {
-        $this->created_at = $created_at;
-
-        return $this;
-    }
+  
+    
 
     /**
      * @return Collection<int, Product>
@@ -157,6 +154,18 @@ class Category
         if ($this->products->removeElement($product)) {
             $product->removeCategory($this);
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }

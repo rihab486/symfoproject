@@ -43,8 +43,8 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $categories;
 
-    #[ORM\Column(type: Types::ARRAY)]
-    private array $imageUrls = [];
+    #[ORM\Column(length: 255)]
+    private ?string $imageUrl =null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $brand = null;
@@ -197,14 +197,14 @@ class Product
         return $this;
     }
 
-    public function getImageUrls(): array
+    public function getImageUrl(): string
     {
-        return $this->imageUrls;
+        return $this->imageUrl;
     }
 
-    public function setImageUrls(array $imageUrls): static
+    public function setImageUrl(string $imageUrl): static
     {
-        $this->imageUrls = $imageUrls;
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }

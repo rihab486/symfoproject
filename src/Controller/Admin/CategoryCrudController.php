@@ -12,12 +12,23 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\BooleanField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ImageField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\SlugField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateTimeField;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 
 class CategoryCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
     {
         return Category::class;
+    }
+
+    public function configureActions(Actions $actions): Actions{
+        return $actions 
+        ->add(Crud::PAGE_EDIT, Action::INDEX)
+        ->add(Crud::PAGE_INDEX, Action::DETAIL)
+        ->add(Crud::PAGE_EDIT, Action::DETAIL)
+        ;
     }
 
     

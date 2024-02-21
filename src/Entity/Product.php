@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Cocur\Slugify\Slugify;
+
+
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 class Product
@@ -43,8 +46,8 @@ class Product
     #[ORM\ManyToMany(targetEntity: Category::class, inversedBy: 'products')]
     private Collection $categories;
 
-    #[ORM\Column(length: 255)]
-    private ?string $imageUrl =null;
+    #[ORM\Column(type: Types::ARRAY)]
+    private array $imageUrls = [];
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $brand = null;
@@ -52,8 +55,7 @@ class Product
     #[ORM\Column(nullable: true)]
     private ?bool $isAvailable = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $status = null;
+    
 
     #[ORM\Column(nullable: true)]
     private ?bool $isBestSeller = null;
@@ -66,10 +68,16 @@ class Product
 
     #[ORM\Column(nullable: true)]
     private ?bool $isSpecialOffer = null;
+ 
+    #[ORM\Column]
+    private ?\DateTimeImmutable $created_at = null;
+
 
     public function __construct()
     {
         $this->categories = new ArrayCollection();
+         $this->setCreatedAt(new \DateTimeImmutable());
+      
     }
 
     public function getId(): ?int
@@ -85,6 +93,18 @@ class Product
     public function setName(string $name): static
     {
         $this->name = $name;
+        $this->setSlug((new Slugify())->slugify($name));
+
+        return $this;
+    }
+    public function getCreatedAt(): ?\DateTimeImmutable
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(?\DateTimeImmutable $created_at): static
+    {
+        $this->created_at = $created_at;
 
         return $this;
     }
@@ -197,14 +217,14 @@ class Product
         return $this;
     }
 
-    public function getImageUrl(): string
+    public function getImageUrls(): array
     {
-        return $this->imageUrl;
+        return $this->imageUrls;
     }
 
-    public function setImageUrl(string $imageUrl): static
+    public function setImageUrls(array $imageUrls): static
     {
-        $this->imageUrl = $imageUrl;
+        $this->imageUrls = $imageUrls;
 
         return $this;
     }
@@ -233,17 +253,7 @@ class Product
         return $this;
     }
 
-    public function getStatus(): ?string
-    {
-        return $this->status;
-    }
 
-    public function setStatus(string $status): static
-    {
-        $this->status = $status;
-
-        return $this;
-    }
 
     public function isIsBestSeller(): ?bool
     {

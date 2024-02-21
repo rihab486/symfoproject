@@ -10,8 +10,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class Data extends Fixture
-{   
-
+{
     private $appKernel;
     private $rootDir;
 
@@ -20,17 +19,17 @@ class Data extends Fixture
         $this->appKernel = $appKernel;
         $this->rootDir = $appKernel->getProjectDir();
     }
-
+    
     public function load(ObjectManager $manager): void
     {
         $filename = $this->rootDir.'/src/DataFixtures/Data/products.json';
-        $data = file_get_contents($filename);
+	    $data = file_get_contents($filename);
+
         $products_json = json_decode($data);
         $products = [];
-       // dd($products_json);
-        
-        // $manager->persist($product);
         foreach ($products_json as $product_item) {
+            # code...
+            
             $product = new Product();
             $product->setName($product_item->name)
                     ->setDescription($product_item->description)
@@ -38,13 +37,40 @@ class Data extends Fixture
                     ->setImageUrls($product_item->imageUrls)
                     ->setSoldePrice($product_item->solde_price*100)
                     ->setRegularPrice($product_item->regular_price*100)
-                     
-                  
             ;
             $products[] = $product;
             $manager->persist($product);
         }
-        //dd($products);
+        $filename = $this->rootDir.'/src/DataFixtures/Data/users.json';
+	    $data = file_get_contents($filename);
+
+        $users_json = json_decode($data);
+        $users = [];
+        foreach ($users_json as $user_item) {
+            # code...
+            
+            $user = new User();
+            $user->setFullName($user_item->fullName)
+                 ->setCivility($user_item->civility)
+                 ->setEmail($user_item->email)
+                 ->setPassword("123456")
+            ;
+          
+            $manager->persist($user);
+        }
+
+        $categories = ["Robes", "Jupes","Culote","Pantalons femmes", "chemises femmes"];
+        foreach ($categories as $name) {
+            # code...
+            
+            $category = new Category();
+            $category->setName($name)
+            ;
+           
+            $manager->persist($category);
+        }
+        
+
         $manager->flush();
     }
 }

@@ -37,15 +37,15 @@ class CategoryCrudController extends AbstractCrudController
         return [
             IdField::new('id')->hideOnForm(),
             TextField::new('name'),
-            DateTimeField::new('created_at'),
+           // DateTimeField::new('created_at'),
             SlugField::new('slug')->setTargetFieldName('name'),
             TextEditorField::new('description'),
             BooleanField::new('isMega'),
             ImageField::new('imageUrl')
             ->setBasePath("/assets/images/categories")
             ->setUploadDir("/public/assets/images/categories")
-            ->setUploadedFileNamePattern('[randomhash].[extension]'),
-          //  ->setRequired(false),
+            ->setUploadedFileNamePattern('[randomhash].[extension]')
+           ->setRequired(false),
             
         ];
     }

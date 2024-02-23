@@ -5,8 +5,13 @@ namespace App\DataFixtures;
 use App\Entity\User;
 use App\Entity\Product;
 use App\Entity\Category;
+use App\Entity\Page;
+use App\Entity\Setting;
+use App\Entity\Sliders;
+use App\Entity\Collections;
 use Doctrine\Persistence\ObjectManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\HttpKernel\KernelInterface;
 
 class Data extends Fixture
@@ -41,6 +46,8 @@ class Data extends Fixture
             $products[] = $product;
             $manager->persist($product);
         }
+
+        //2.User
         $filename = $this->rootDir.'/src/DataFixtures/Data/users.json';
 	    $data = file_get_contents($filename);
 
@@ -58,17 +65,106 @@ class Data extends Fixture
           
             $manager->persist($user);
         }
+        //3.Category
+        $filename = $this->rootDir.'/src/DataFixtures/Data/categories.json';
+	    $data = file_get_contents($filename);
+        $categories_json = json_decode($data);
 
-        $categories = ["Robes", "Jupes","Culote","Pantalons femmes", "chemises femmes"];
-        foreach ($categories as $name) {
+        foreach ($categories_json as $categorie_item) {
             # code...
             
             $category = new Category();
-            $category->setName($name)
+            $category->setName($categorie_item->name)
+                    ->setIsMega($categorie_item->isMega)
             ;
            
             $manager->persist($category);
         }
+
+        //4- SLIDERS
+        $filename = $this->rootDir.'/src/DataFixtures/Data/sliders.json';
+	    $data = file_get_contents($filename);
+
+        $sliders_json = json_decode($data);
+        $sliders = [];
+        foreach ($sliders_json as $slider_item) {
+            # code...
+            
+            $slider = new Sliders();
+            $slider->setTitle($slider_item->title)
+                ->setDescription($slider_item->description)
+                ->setButtonText($slider_item->button_text)
+                ->setButtonLink($slider_item->button_link)
+                ->setImageUrl($slider_item->imageUrl)
+            ;
+            $manager->persist($slider);
+        }
+        //5- COLLECTIONS
+        $filename = $this->rootDir.'/src/DataFixtures/Data/collections.json';
+	    $data = file_get_contents($filename);
+
+        $collections_json = json_decode($data);
+        $collections = [];
+        foreach ($collections_json as $collection_item) {
+            # code...
+            
+            $collection = new collections();
+            $collection->setTitle($collection_item->title)
+                ->setDescription($collection_item->description)
+                ->setButtonText($collection_item->button_text)
+                ->setButtonLink($collection_item->button_link)
+                ->setImageUrl($collection_item->imageUrl)
+            ;
+            $manager->persist($collection);
+        }
+        //6- PAGES
+        $filename = $this->rootDir.'/src/DataFixtures/Data/pages.json';
+	    $data = file_get_contents($filename);
+
+        $pages_json = json_decode($data);
+        $pages = [];
+        foreach ($pages_json as $page_item) {
+            # code...
+            
+            $page = new Page();
+            $page->setTitle($page_item->title)
+                    ->setContent($page_item->content)
+                    ->setIsHead($page_item->isHead)
+                    ->setIsFoot($page_item->isFoot)
+                    
+            ;
+            $manager->persist($page);
+        }
+        
+        //6- SETTING
+        $filename = $this->rootDir.'/src/DataFixtures/Data/setting.json';
+	    $data = file_get_contents($filename);
+
+        $settings_json = json_decode($data);
+        $settings = [];
+        foreach ($settings_json as $setting_item) {
+            # code...
+            
+            $setting = new Setting();
+            $setting->setWebsiteName($setting_item->website_name)
+                    ->setDescription($setting_item->description)
+                    ->setEmail($setting_item->email)
+                    ->setPhone($setting_item->phone)
+                    ->setLogo($setting_item->logo)
+                    ->setCurrency($setting_item->currency)
+                    ->setFacebookLink($setting_item->facebookLink)
+                    ->setYoutubeLink($setting_item->youtubeLink)
+                    ->setInstagramLink($setting_item->instagramLink)
+                    ->setStreet($setting_item->street)
+                    ->setCity($setting_item->city)
+                    ->setCodePostal($setting_item->code_postal)
+                    ->setState($setting_item->state)
+                    ->setCopyRight($setting_item->copyright)
+            ;
+            $manager->persist($setting);
+        }
+        
+
         
 
         $manager->flush();

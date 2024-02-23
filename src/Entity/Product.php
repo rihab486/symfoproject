@@ -72,6 +72,9 @@ class Product
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
+    #[ORM\ManyToOne(targetEntity: self::class)]
+    private ?self $relatedProducts = null;
+
 
     public function __construct()
     {
@@ -302,4 +305,20 @@ class Product
 
         return $this;
     }
+
+    public function getRelatedProducts(): ?self
+    {
+        return $this->relatedProducts;
+    }
+
+    public function setRelatedProducts(?self $relatedProducts): static
+    {
+        $this->relatedProducts = $relatedProducts;
+
+        return $this;
+    }
+    public function __toString()
+        {
+            return $this->getName(); // Assuming there's a method called getName() returning the name of the product
+        }
 }

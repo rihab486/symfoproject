@@ -39,20 +39,15 @@ class ProductCrudController extends AbstractCrudController
             TextField::new('name'),
             SlugField::new('slug')->setTargetFieldName('name'),
             TextField::new('description'),
-            TextEditorField::new('more_description'),
-            TextEditorField::new('additional_infos'),
+            TextEditorField::new('more_description')->hideOnIndex(),
+            TextEditorField::new('additional_infos')->hideOnIndex(),
+            AssociationField::new('relatedProducts')->hideOnIndex(),
             ImageField::new('imageUrls')
-            ->setFormTypeOptions([
-                "multiple"=> true,
-                'attr' =>[
-                    'accept'=> 'image/*'
-                ]
-            ])
-            
-            ->setBasePath("assets/images/products")
-            ->setUploadDir("/public/assets/images/products")
-            ->setUploadedFileNamePattern('[randomhash].[extension]')
-            ->setRequired($pageName === Crud::PAGE_NEW),
+                ->setFormTypeOptions([ "multiple"=> true, 'attr' =>[ 'accept'=> 'image/*']])
+                ->setBasePath("assets/images/products")
+                ->setUploadDir("/public/assets/images/products")
+                ->setUploadedFileNamePattern('[randomhash].[extension]')
+                ->setRequired($pageName === Crud::PAGE_NEW),
             MoneyField::new('solde_price')->setCurrency("EUR"),
             MoneyField::new('regular_price')->setCurrency("EUR"),
             IntegerField::new('stock'),
